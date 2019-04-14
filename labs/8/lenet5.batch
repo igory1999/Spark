@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#SBATCH --job-name=lenet5
+#SBATCH --exclusive
+#SBATCH --nodes=1
+#SBATCH --time=02:00:00
+#SBATCH --partition=broadwl
+#SBATCH --output=lenet5_%j.out
+#SBATCH --error=lenet5_%j.err
+####SBATCH --account=rcc-guest
+
+source ../env.sh
+source env.sh
+export SPARK_DRIVER_MEMORY=20g
+
+export MASTER="local[*]"
+
+echo "Training model"
+spark-submit --master $MASTER --jars ${BIGDL_JAR} ${BIGDL_HOME}/models/lenet/lenet5.py -b 280 -a train -o model/lenet5 -c checkpoints -d mnist_data
+
+echo "Testing model"
+
+echo "Testing model"
+spark-submit --master $MASTER --jars ${BIGDL_JAR} ${BIGDL_HOME}/models/lenet/lenet5.py -b 280 -a test -o model/lenet5 -d mnist_data

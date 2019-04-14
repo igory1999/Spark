@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#SBATCH --job-name=lenet_local
+#SBATCH --exclusive
+#SBATCH --nodes=1
+#SBATCH --time=10
+#SBATCH --partition=broadwl
+#SBATCH --output=lenet_local_%j.out
+#SBATCH --error=lenet_local_%j.err
+####SBATCH --account=rcc-guest
+
+source ../env.sh
+source env.sh
+export SPARK_DRIVER_MEMORY=20g
+
+python ${BIGDL_HOME}/models/local_lenet/local_lenet.py
